@@ -81,7 +81,7 @@ function renderDirectory() {
       // Ground floor: all tenants on one line separated by a middot
       const span = document.createElement("span");
       span.className = "tenant";
-      span.innerHTML = (floor.tenants ?? []).map(escHtml).join("&nbsp;&nbsp;·&nbsp;&nbsp;");
+      span.innerHTML = (floor.tenants ?? []).map(escHtml).join("&nbsp;&nbsp;&nbsp;&nbsp;·&nbsp;&nbsp;&nbsp;&nbsp;");
       tenantsEl.appendChild(span);
     } else {
       (floor.tenants ?? []).forEach(name => {
