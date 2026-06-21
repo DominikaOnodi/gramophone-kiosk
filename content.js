@@ -24,7 +24,6 @@ window.KIOSK_CONTENT = {
   screens: [
     { type: "directory", duration: 22000 },
     { type: "story",     duration: 13000 },
-    { type: "gallery",   galleryIndex: 0, duration: 13000 },
     { type: "gallery",   galleryIndex: 1, duration: 13000 },
     { type: "events",    duration: 13000 }
   ],

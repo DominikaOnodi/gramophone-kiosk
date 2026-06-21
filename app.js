@@ -88,11 +88,17 @@ function renderDirectory() {
     list.appendChild(li);
   });
 
-  // TSP logo — fall back to text if image fails to load
-  const logoImg      = document.getElementById("tsp-logo-img");
-  const logoText     = document.getElementById("tsp-logo-text");
-  const tspName      = data.tsp?.name ?? "TSP";
-  const tspLogoPath  = data.tsp?.logo ?? "";
+  renderTSPLogo(SCREENS.directory);
+}
+
+function renderTSPLogo(screenEl) {
+  if (!data) return;
+  const logoImg  = screenEl.querySelector(".tsp-logo-img");
+  const logoText = screenEl.querySelector(".tsp-logo-text");
+  if (!logoImg) return;
+
+  const tspName     = data.tsp?.name ?? "TSP";
+  const tspLogoPath = data.tsp?.logo ?? "";
 
   logoText.textContent = tspName;
 
@@ -158,6 +164,8 @@ function galleryPlaceholder(name) {
 
 function renderEvents() {
   if (!data) return;
+
+  renderTSPLogo(SCREENS.events);
 
   document.querySelector("#s-events .events-eyebrow").textContent =
     data.eventsEyebrow ?? "What's On";
