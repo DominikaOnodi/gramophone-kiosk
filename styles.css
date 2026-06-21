@@ -1,0 +1,368 @@
+/* ─────────────────────────────────────────────────
+   THE GRAMOPHONE WORKS — KIOSK DISPLAY
+   Serve via local HTTP server, not file://
+   Tuned for 1080p – 1440p display at reception
+   ───────────────────────────────────────────────── */
+
+/* ── Reset ─────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+ul { list-style: none; }
+
+/* ── Design tokens ──────────────────────────────── */
+:root {
+  --cream:    #F6F2EC;
+  --ink:      #1C1815;
+  --ink-mid:  #7A6F65;
+  --rule:     rgba(28, 24, 21, 0.12);
+
+  --serif:    'Fraunces', Georgia, serif;
+  --sans:     'Inter', system-ui, sans-serif;
+
+  --pad-x:    5.5vw;
+  --pad-y:    5.5vh;
+}
+
+/* ── Base ───────────────────────────────────────── */
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  cursor: none;
+  background: var(--cream);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::-webkit-scrollbar { display: none; }
+html { scrollbar-width: none; }
+
+/* ── Kiosk shell ────────────────────────────────── */
+.kiosk {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+}
+
+/* ── All screens ────────────────────────────────── */
+.screen {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  padding: var(--pad-y) var(--pad-x);
+  background: var(--cream);
+  opacity: 0;
+  transition: opacity 0.8s ease-in-out;
+  pointer-events: none;
+}
+
+.screen.active {
+  opacity: 1;
+  pointer-events: auto;
+  z-index: 1;
+}
+
+
+/* ═══════════════════════════════════════════════════
+   SCREEN 1 — FLOOR DIRECTORY
+   ═══════════════════════════════════════════════════ */
+
+.screen--directory {
+  position: absolute; /* for TSP absolute child */
+}
+
+.dir-top {
+  margin-bottom: clamp(28px, 3.5vh, 52px);
+  flex-shrink: 0;
+}
+
+.dir-eyebrow {
+  font-family: var(--sans);
+  font-size: clamp(11px, 0.65vw, 13px);
+  font-weight: 500;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--ink-mid);
+  margin-bottom: 10px;
+}
+
+.dir-heading {
+  font-family: var(--serif);
+  font-weight: 300;
+  font-size: clamp(38px, 4.2vw, 68px);
+  line-height: 1;
+  letter-spacing: -0.01em;
+}
+
+/* Floor list — fills remaining vertical space, entries equal height */
+.dir-floors {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid var(--rule);
+}
+
+.floor-entry {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: clamp(32px, 4.5vw, 80px);
+  border-bottom: 1px solid var(--rule);
+}
+
+/* Large serif floor numeral */
+.floor-num {
+  font-family: var(--serif);
+  font-weight: 300;
+  font-size: clamp(52px, 5.8vw, 92px);
+  line-height: 1;
+  min-width: clamp(100px, 11vw, 180px);
+  flex-shrink: 0;
+  color: var(--ink);
+}
+
+/* "Ground" label is a word, not a number — slightly smaller + italic */
+.floor-entry--ground .floor-num {
+  font-style: italic;
+  font-size: clamp(30px, 3.2vw, 52px);
+}
+
+.floor-tenants {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.tenant {
+  font-family: var(--sans);
+  font-weight: 300;
+  font-size: clamp(16px, 1.5vw, 26px);
+  line-height: 1.45;
+  color: var(--ink);
+}
+
+/* Ground floor tenants are listed services, not brands — slightly muted */
+.floor-entry--ground .tenant {
+  color: var(--ink-mid);
+}
+
+/* TSP logo — bottom-right, very quiet */
+.tsp-wordmark {
+  position: absolute;
+  bottom: clamp(20px, 2.8vh, 44px);
+  right: var(--pad-x);
+}
+
+.tsp-logo-img {
+  height: clamp(44px, 5.5vh, 80px);
+  width: auto;
+  display: block;
+  mix-blend-mode: multiply;
+  opacity: 0.7;
+}
+
+/* Shown if logo image fails to load */
+.tsp-logo-text {
+  display: none;
+  font-family: var(--sans);
+  font-weight: 500;
+  font-size: clamp(10px, 0.65vw, 13px);
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--ink-mid);
+  opacity: 0.55;
+}
+
+
+/* ═══════════════════════════════════════════════════
+   SCREEN 2 — BUILDING STORY
+   ═══════════════════════════════════════════════════ */
+
+.screen--story {
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding-left: clamp(5vw, 14vw, 20vw);
+  padding-right: clamp(5vw, 14vw, 20vw);
+  overflow: hidden;
+}
+
+/* Full-bleed building photo, faded behind the text */
+.story-bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  opacity: 0.14;
+  z-index: 0;
+}
+
+/* Text sits above the background */
+.story-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.story-eyebrow {
+  font-family: var(--sans);
+  font-size: clamp(11px, 0.65vw, 13px);
+  font-weight: 500;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--ink-mid);
+  margin-bottom: clamp(28px, 4vh, 56px);
+}
+
+.story-fact {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 300;
+  font-size: clamp(26px, 3.5vw, 60px);
+  line-height: 1.3;
+  color: var(--ink);
+  max-width: 22ch;
+}
+
+
+/* ═══════════════════════════════════════════════════
+   SCREEN 3 — GALLERY / ARTIST SLIDESHOW
+   ═══════════════════════════════════════════════════ */
+
+/* Gallery is full-bleed — override shared padding */
+.screen--gallery {
+  padding: 0;
+}
+
+/* Image fills remaining space */
+.gallery-visual {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  background: #DDD8D2;
+}
+
+.gallery-visual img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+/* Placeholder when no image is available */
+.gallery-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #DDD8D2;
+}
+
+.gallery-placeholder-label {
+  font-family: var(--sans);
+  font-size: clamp(12px, 0.8vw, 14px);
+  font-weight: 400;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: #8A8278;
+}
+
+/* Caption bar at bottom */
+.gallery-caption {
+  flex-shrink: 0;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 40px;
+  padding: clamp(18px, 2.2vh, 32px) clamp(32px, 4.5vw, 72px);
+  background: var(--cream);
+  border-top: 1px solid var(--rule);
+}
+
+.gallery-name {
+  font-family: var(--serif);
+  font-weight: 300;
+  font-size: clamp(20px, 2vw, 34px);
+  line-height: 1.2;
+  color: var(--ink);
+}
+
+.gallery-meta {
+  font-family: var(--sans);
+  font-size: clamp(11px, 0.75vw, 13px);
+  font-weight: 400;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-mid);
+  white-space: nowrap;
+}
+
+
+/* ═══════════════════════════════════════════════════
+   SCREEN 4 — EVENTS
+   ═══════════════════════════════════════════════════ */
+
+.events-top {
+  flex-shrink: 0;
+  margin-bottom: clamp(24px, 3vh, 44px);
+}
+
+.events-eyebrow {
+  font-family: var(--sans);
+  font-size: clamp(11px, 0.65vw, 13px);
+  font-weight: 500;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--ink-mid);
+  margin-bottom: 10px;
+}
+
+.events-heading {
+  font-family: var(--serif);
+  font-weight: 300;
+  font-size: clamp(34px, 3.8vw, 62px);
+  line-height: 1;
+  letter-spacing: -0.01em;
+}
+
+/* Event list — fills remaining vertical space, entries equal height */
+.events-list {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid var(--rule);
+}
+
+.event-entry {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: clamp(32px, 5vw, 80px);
+  border-bottom: 1px solid var(--rule);
+}
+
+.event-date {
+  font-family: var(--sans);
+  font-size: clamp(12px, 0.85vw, 15px);
+  font-weight: 400;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--ink-mid);
+  min-width: clamp(100px, 11vw, 170px);
+  flex-shrink: 0;
+}
+
+.event-title {
+  font-family: var(--serif);
+  font-weight: 300;
+  font-size: clamp(22px, 2.4vw, 40px);
+  line-height: 1.25;
+  color: var(--ink);
+}
