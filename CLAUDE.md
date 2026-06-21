@@ -86,7 +86,7 @@ Edit `content.js` only. Never touch the other files unless changing layout/logic
 - **Sans font:** Inter (Google Fonts) — eyebrows, tenant names, dates, captions
 - **Rules:** flat, no shadows, no rounded cards, no gradients
 - **Type sizes:** large for distance viewing (floor numbers ~80–96px, facts ~52px)
-- **TSP logo:** bottom-right of directory screen only, quiet and unobtrusive
+- **TSP logo:** top-right of directory and events screens; `mix-blend-mode: multiply` strips white background
 
 ---
 
@@ -105,13 +105,25 @@ Edit `content.js` only. Never touch the other files unless changing layout/logic
 - Events: Kindred Studios recurring sessions from kindredstudios.co.uk/calendar
 - `CLAUDE.md` created
 
+### Session 2 — 21 June 2026
+- Removed building exterior photo as its own slide — exterior photo now used only as faded background on the facts/story screen
+- Active rotation is now 4 slides: Directory (22s) → Building fact (13s) → Building info photo (13s) → Kindred events (13s)
+- TSP logo moved from bottom-right to top-right; made larger (`56–100px`); added to events screen too
+- Building story background: opacity tuned to `0.40`; cream `text-shadow` halo added to fact text for readability against the photo
+- Directory text: sizes increased for large-screen distance viewing; weight set to `350` (Fraunces variable font)
+- Ground floor tenants rendered inline on one line with `·` middot separator instead of stacked
+- Events: date text enlarged and set to full ink colour for distance readability
+- Fixed images not loading: Windows had added double extensions (`tsp-logo.png.png` etc.) — renamed all three files
+- Fixed content loading: switched from `fetch(content.json)` to `<script src="content.js">` so it works by double-clicking without a local server
+- Deployed to Netlify via GitHub (`gramophonekiosk.netlify.app`) — branch `main`, publish dir `.`, no build command
+- Building-info image updated locally but not committed — pushed in this session; always `git add` + `git commit` + `git push` after replacing image files
+
 ### In Progress
-- Second building info image (`images/building-info.jpg`) — user will add soon
+*(nothing — clean end to session 2)*
 
 ### Next Up
-- Add `images/building-info.jpg` — second building slide (slot is already in the rotation)
-- Tenant photos: Kindred Studios, Emilia Wickstead, Perfect Moment — activate slides when photos arrive
-- Kindred events — update when specific dated events are published on their calendar
+- Tenant photos: Kindred Studios, Emilia Wickstead, Perfect Moment — drop images in `images/`, add to `screens[]` in `content.js`
+- Kindred events — update `content.js` when specific dated events are published on their calendar
 - Consider custom domain / tablet mounting setup for permanent display
 
 ---
