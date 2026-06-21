@@ -76,12 +76,21 @@ function renderDirectory() {
 
     const tenantsEl = document.createElement("div");
     tenantsEl.className = "floor-tenants";
-    (floor.tenants ?? []).forEach(name => {
+
+    if (floor.floor === "Ground") {
+      // Ground floor: all tenants on one line separated by a middot
       const span = document.createElement("span");
-      span.className   = "tenant";
-      span.textContent = name;
+      span.className = "tenant";
+      span.innerHTML = (floor.tenants ?? []).map(escHtml).join("&nbsp;&nbsp;·&nbsp;&nbsp;");
       tenantsEl.appendChild(span);
-    });
+    } else {
+      (floor.tenants ?? []).forEach(name => {
+        const span = document.createElement("span");
+        span.className   = "tenant";
+        span.textContent = name;
+        tenantsEl.appendChild(span);
+      });
+    }
 
     li.appendChild(numEl);
     li.appendChild(tenantsEl);
