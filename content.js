@@ -94,23 +94,34 @@ window.KIOSK_CONTENT = {
   ],
 
   // ── Events ────────────────────────────────────────────
-  // date: use "YYYY-MM-DD" for specific dates, or plain text for recurring sessions.
+  // upcomingEvents: one-off events. Use "YYYY-MM-DD" — past dates are hidden automatically.
+  // recurringEvents: always shown below upcoming ones.
 
   eventsEyebrow: "Kindred Studios",
   eventsTitle:   "Sessions & Events",
 
-  events: [
-    { date: "Mondays & Wednesdays", title: "Life Drawing" },
-    { date: "Every Tuesday",        title: "Qi Gong" },
-    { date: "Every Thursday",       title: "Kindred Choir, 6–7pm" },
-    { date: "First Thursday",       title: "Monthly Artist Support Group" }
+  upcomingEvents: [
+    { date: "2026-06-28", title: "Open Studios" }
+    // Add more from kindredstudios.co.uk/calendar as they appear
   ],
 
-  // ── TSP branding ──────────────────────────────────────
+  recurringEvents: [
+    { date: "Mon & Wed",      title: "Life Drawing" },
+    { date: "Every Tuesday",  title: "Qi Gong" },
+    { date: "Every Thursday", title: "Kindred Choir, 6–7pm" },
+    { date: "First Thursday", title: "Monthly Artist Support Group" }
+  ],
+
+  // ── Branding ──────────────────────────────────────────
 
   tsp: {
     name: "TSP",
     logo: "images/tsp-logo.png"
+  },
+
+  kindred: {
+    name: "Kindred Studios",
+    logo: "images/kindred-logo.png"
   }
 
 };

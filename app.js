@@ -7,7 +7,7 @@
    ───────────────────────────────────────────────── */
 
 const DEFAULT_DURATION  = 13_000;
-const AUTO_RELOAD_MS    = 30 * 60_000; // reload page every 30 min for content updates
+const AUTO_RELOAD_MS    = 50 * 60_000; // reload page every 30 min for content updates
 
 const DEFAULT_ROTATION = [
   { type: "directory", duration: 22_000 },
@@ -97,22 +97,19 @@ function renderDirectory() {
     list.appendChild(li);
   });
 
-  renderTSPLogo(SCREENS.directory);
+  renderLogo(SCREENS.directory, data.tsp);
 }
 
-function renderTSPLogo(screenEl) {
-  if (!data) return;
+function renderLogo(screenEl, logoData) {
+  if (!data || !logoData) return;
   const logoImg  = screenEl.querySelector(".tsp-logo-img");
   const logoText = screenEl.querySelector(".tsp-logo-text");
   if (!logoImg) return;
 
-  const tspName     = data.tsp?.name ?? "TSP";
-  const tspLogoPath = data.tsp?.logo ?? "";
+  logoText.textContent = logoData.name ?? "";
 
-  logoText.textContent = tspName;
-
-  if (tspLogoPath) {
-    logoImg.alt     = tspName;
+  if (logoData.logo) {
+    logoImg.alt     = logoData.name ?? "";
     logoImg.onerror = () => {
       logoImg.style.display  = "none";
       logoText.style.display = "block";
@@ -121,7 +118,7 @@ function renderTSPLogo(screenEl) {
       logoImg.style.display  = "block";
       logoText.style.display = "none";
     };
-    logoImg.src = tspLogoPath;
+    logoImg.src = logoData.logo;
   } else {
     logoImg.style.display  = "none";
     logoText.style.display = "block";
@@ -171,10 +168,28 @@ function galleryPlaceholder(name) {
   </div>`;
 }
 
+function getEventsToShow() {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  const upcoming = (data.upcomingEvents ?? [])
+    .filter(ev => {
+      if (/^\d{4}-\d{2}-\d{2}$/.test(ev.date)) {
+        const [y, m, d] = ev.date.split("-").map(Number);
+        return new Date(y, m - 1, d) >= today;
+      }
+      return false;
+    })
+    .sort((a, b) => a.date.localeCompare(b.date));
+
+  const recurring = data.recurringEvents ?? data.events ?? [];
+  return [...upcoming, ...recurring];
+}
+
 function renderEvents() {
   if (!data) return;
 
-  renderTSPLogo(SCREENS.events);
+  renderLogo(SCREENS.events, data.kindred ?? data.tsp);
 
   document.querySelector("#s-events .events-eyebrow").textContent =
     data.eventsEyebrow ?? "What's On";
@@ -184,7 +199,7 @@ function renderEvents() {
   const list = document.getElementById("events-list");
   list.innerHTML = "";
 
-  (data.events ?? []).forEach(ev => {
+  getEventsToShow().forEach(ev => {
     const li = document.createElement("li");
     li.className = "event-entry";
 
