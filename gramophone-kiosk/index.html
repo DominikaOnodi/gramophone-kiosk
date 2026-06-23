@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Gramophone Works</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,300;1,9..40,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="kiosk">
+
+    <!-- Screen 1: Floor Directory -->
+    <section class="screen screen--directory" id="s-directory">
+      <div class="dir-top">
+        <p class="dir-eyebrow" id="dir-eyebrow">The Gramophone Works</p>
+        <h1 class="dir-heading">Directory</h1>
+      </div>
+      <ul class="dir-floors" id="dir-floors" role="list"></ul>
+      <div class="tsp-wordmark" id="tsp-wordmark" aria-hidden="true">
+        <img class="tsp-logo-img" id="tsp-logo-img" src="" alt="TSP" />
+        <span class="tsp-logo-text" id="tsp-logo-text"></span>
+      </div>
+    </section>
+
+    <!-- Screen 2: Building Story -->
+    <section class="screen screen--story" id="s-story">
+      <div class="story-bg" id="story-bg"></div>
+      <div class="story-content">
+        <p class="story-eyebrow">The Building</p>
+        <p class="story-fact" id="story-fact"></p>
+      </div>
+    </section>
+
+    <!-- Screen 3: Gallery -->
+    <section class="screen screen--gallery" id="s-gallery">
+      <div class="gallery-visual" id="gallery-visual"></div>
+      <div class="gallery-caption">
+        <span class="gallery-name" id="gallery-name"></span>
+        <span class="gallery-meta" id="gallery-meta"></span>
+      </div>
+    </section>
+
+    <!-- Screen 4: Events -->
+    <section class="screen screen--events" id="s-events">
+      <div class="tsp-wordmark" aria-hidden="true">
+        <img class="tsp-logo-img" src="" alt="TSP" />
+        <span class="tsp-logo-text"></span>
+      </div>
+      <div class="events-top">
+        <p class="events-eyebrow">What's On</p>
+        <h2 class="events-heading">Upcoming Events</h2>
+      </div>
+      <ul class="events-list" id="events-list" role="list"></ul>
+    </section>
+
+  </div>
+  <script src="content.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
